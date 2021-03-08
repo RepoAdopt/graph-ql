@@ -1,7 +1,6 @@
-from datetime import datetime
 from mongoengine import Document
 from mongoengine.fields import (
-    DateTimeField, ReferenceField, StringField,
+    StringField,
 )
 
 

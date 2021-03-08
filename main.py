@@ -10,7 +10,6 @@ app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
     schema=schema,
     graphiql=True,
     pretty=True,
-    view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True)
 ))
 
 

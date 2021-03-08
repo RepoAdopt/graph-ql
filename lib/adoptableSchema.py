@@ -7,12 +7,11 @@ from lib.models import Adoptable as AdoptableModel
 class Adoptable(MongoengineObjectType):
     class Meta:
         model = AdoptableModel
-        interfaces = (Node,)
+        interfaces=(Node,)
 
 
 class Query(graphene.ObjectType):
-    node = Node.Field()
     all_adoptables = MongoengineConnectionField(Adoptable)
 
 
-schema = graphene.Schema(query=Query, types=[Adoptable])
+schema = graphene.Schema(query=Query)
