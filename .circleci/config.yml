@@ -12,6 +12,9 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
+          name: install dependencies
+          command: pipenv sync
+      - run:
           name: run tests
           command: pipenv run test
 
