@@ -1,9 +1,9 @@
 from lib.model.AdoptableModel import Adoptable
 
 def populate():
-    adoptable = Adoptable(repository="testRepo1")
+    adoptable = Adoptable(repository="RepoAdopt/client")
     adoptable.save()
-    adoptable1 = Adoptable(repository="testRepo2")
+    adoptable1 = Adoptable(repository="RepoAdopt/graph-ql")
     adoptable1.save()
-    adoptable1 = Adoptable(repository="testRepo3")
+    adoptable1 = Adoptable(repository="RepoAdopt/event-handlers")
     adoptable1.save()
