@@ -24,25 +24,80 @@ class TestAdoptable(unittest.TestCase):
         disconnect()
 
     def test_adoptable_model(self):
-        fresh_adoptable = Adoptable.objects().first()
-        assert fresh_adoptable.repository == "testRepo"
+        adoptable = Adoptable.objects().first()
+        assert adoptable.repository == "testRepo"
 
-    def test_get_adoptables(self):
+    def test_get_all_adoptables(self):
         sent = '''
         {
           allAdoptables {
-            edges{
-              node{
-                repository
-              }
-            }
+            repository
           }
         }
         '''
 
-        expected = {'data': {'allAdoptables': {'edges': [{'node': {'repository': 'testRepo'}}, {'node': {'repository': 'testRepo1'}}]}}}
+        expected = {'data': {'allAdoptables': [{'repository': 'testRepo1'}, {'repository': 'testRepo'}]}}
 
         client = Client(schema)
         executed = client.execute(sent)
-        print(executed)
+        assert executed == expected
+
+    def test_get_pagination_adoptables_first_page(self):
+        sent = '''
+                {
+                  paginationAdoptables(page: 0 limit: 1) {
+                    repository
+                  }
+                }
+                '''
+
+        expected = {'data': {'paginationAdoptables': [{'repository': 'testRepo1'}]}}
+
+        client = Client(schema)
+        executed = client.execute(sent)
+        assert executed == expected
+
+    def test_get_pagination_adoptables_second_page(self):
+        sent = '''
+                {
+                  paginationAdoptables(page: 1 limit: 1) {
+                    repository
+                  }
+                }
+                '''
+
+        expected = {'data': {'paginationAdoptables': [{'repository': 'testRepo'}]}}
+
+        client = Client(schema)
+        executed = client.execute(sent)
+        assert executed == expected
+
+    def test_get_pagination_adoptables_multiple_items_per_page(self):
+        sent = '''
+                {
+                  paginationAdoptables(page: 0 limit: 10) {
+                    repository
+                  }
+                }
+                '''
+
+        expected = {'data': {'paginationAdoptables': [{'repository': 'testRepo1'}, {'repository': 'testRepo'}]}}
+
+        client = Client(schema)
+        executed = client.execute(sent)
+        assert executed == expected
+
+    def test_get_pagination_adoptables_no_adoptables_in_page(self):
+        sent = '''
+                {
+                  paginationAdoptables(page: 1 limit: 10) {
+                    repository
+                  }
+                }
+                '''
+
+        expected = {'data': {'paginationAdoptables': []}}
+
+        client = Client(schema)
+        executed = client.execute(sent)
         assert executed == expected
