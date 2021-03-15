@@ -1,6 +1,6 @@
 import graphene
 from graphene.relay import Node
-from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
+from graphene_mongo import MongoengineObjectType
 from lib.model.AdoptableModel import Adoptable as AdoptableModel
 
 
@@ -11,6 +11,9 @@ class Adoptable(MongoengineObjectType):
 
 
 class Query(graphene.ObjectType):
-    all_adoptables = MongoengineConnectionField(Adoptable)
+    adoptables = graphene.List(Adoptable)
+
+    def resolve_adoptables(self, info):
+        return list(AdoptableModel.objects.all())
 
 schema = graphene.Schema(query=Query)
