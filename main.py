@@ -1,7 +1,7 @@
 from flask import Flask
 from mongoengine import connect
 from flask_graphql import GraphQLView
-from lib.adoptableSchema import schema
+from lib.schema.AdoptableSchema import schema
 
 app = Flask(__name__)
 
