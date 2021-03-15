@@ -12,7 +12,7 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: python -m ./lib/tests/unittests/TestAdoptableSchema.py
+          command: pipenv run python ./lib/tests/unittests/TestAdoptableSchema.py test
           name: Test
 
 workflows:
