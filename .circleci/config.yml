@@ -12,9 +12,7 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: 
-            pip install -r ./requirements.txt
-            pipenv run python ./lib/tests/unittests/TestAdoptableSchema.py test
+          command: pipenv run python ./lib/tests/unittests/TestAdoptableSchema.py test
 
 workflows:
   main:
