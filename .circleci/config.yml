@@ -13,7 +13,7 @@ jobs:
       - python/save-cache
       - run:
           name: run tests
-          command: python run test
+          command: python -m unittest lib/tests/unittests/TestAdoptableSchema.py
 
 workflows:
   main:
