@@ -1,12 +1,9 @@
 import unittest
 
-from main import app
 from graphene.test import Client
 from mongoengine import connect, disconnect
 from lib.model.AdoptableModel import Adoptable
 from lib.schema.AdoptableSchema import schema
-
-app.testing = True
 
 
 class TestAdoptable(unittest.TestCase):
