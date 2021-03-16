@@ -14,8 +14,14 @@ jobs:
       - run:
           name: run tests
           command: python -m unittest lib/tests/unittests/TestAdoptableSchema.py
+    docker:
+      - setup_remote_docker:
+        version: 19.03.13
+        docker_layer_caching: true
+      - run: docker build -t docker.io/$DOCKER_NAME/GraphQL:$CIRCLE_BRANCH .
 
 workflows:
   main:
     jobs:
       - build-and-test
+      - docker-and-push
