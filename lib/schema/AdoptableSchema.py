@@ -22,4 +22,22 @@ class Query(graphene.ObjectType):
         return list(AdoptableModel.objects.order_by('-id').skip(adoptables_to_skip).limit(limit))
 
 
-schema = graphene.Schema(query=Query)
+class AdoptableMutation(graphene.Mutation):
+
+    adoptable = graphene.Field(Adoptable)
+
+    class Arguments:
+        repository = graphene.String()
+
+    def mutate(root, info, repository):
+        adoptable = AdoptableModel(repository=repository)
+        adoptable.save()
+
+        return AdoptableMutation(adoptable=adoptable)
+
+
+class Mutation(graphene.ObjectType):
+    adoptable = AdoptableMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
