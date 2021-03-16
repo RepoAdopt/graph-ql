@@ -18,12 +18,18 @@ jobs:
   docker-build:
     docker:
       - image: docker:17.05.0-ce-git
+        auth: 
+          username: $DOCKER_NAME
+          password: $DOCKER_PASSWORD
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: docker build
-          command: docker build -t docker.io/$DOCKER_NAME/graphql:${CIRCLE_BRANCH#*/} .
+          command: docker build -t docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/} .
+      - run:
+          name: docker push
+          command: docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
 
 workflows:
   main:
