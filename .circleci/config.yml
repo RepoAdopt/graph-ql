@@ -7,8 +7,7 @@ jobs:
   build-and-test:
     executor: python/default
     docker:
-      - setup_remote_docker:
-        version: 19.03.13
+      - image: docker:17.05.0-ce-git
     steps:
       - checkout
       - python/load-cache
@@ -17,10 +16,12 @@ jobs:
       - run:
           name: run tests
           command: python -m unittest lib/tests/unittests/TestAdoptableSchema.py
-      - run: docker build -t docker.io/$DOCKER_NAME/GraphQL:$CIRCLE_BRANCH .
+      - setup_remote_docker
+      - run:
+          name: docker build
+          command: docker build -t docker.io/$DOCKER_NAME/GraphQL:$CIRCLE_BRANCH .
 
 workflows:
   main:
     jobs:
       - build-and-test
-      - docker-and-push
