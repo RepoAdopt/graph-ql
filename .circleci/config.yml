@@ -18,6 +18,14 @@ jobs:
           command: python -m unittest lib/tests/unittests/TestAdoptableSchema.py
       - setup_remote_docker
       - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.12.0 \
+              awscli==1.11.76
+      - run:
           name: docker build
           command: docker build -t docker.io/$DOCKER_NAME/GraphQL:$CIRCLE_BRANCH .
 
