@@ -26,10 +26,9 @@ jobs:
           command: docker build -t docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/} .
       - run:
           name: docker login
-          command: docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
-      - run:
-          name: docker push
-          command: docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
+          command: |
+           docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
+           docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
 
 workflows:
   main:
