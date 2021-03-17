@@ -19,4 +19,4 @@ class CreateAdoptable(graphene.Mutation):
 
 
 class Mutation:
-    adoptable = CreateAdoptable.Field()
+    create_adoptable = CreateAdoptable.Field()
