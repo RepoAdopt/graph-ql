@@ -10,9 +10,10 @@ class CreateAdoptable(graphene.Mutation):
 
     class Arguments:
         repository = graphene.String()
+        description = graphene.String()
 
-    def mutate(root, info, repository):
-        adoptable = Adoptable(repository=repository)
+    def mutate(root, info, repository, description):
+        adoptable = Adoptable(repository=repository, description=description)
         adoptable.save()
 
         return CreateAdoptable(adoptable=adoptable)
