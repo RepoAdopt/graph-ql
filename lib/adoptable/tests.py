@@ -63,7 +63,8 @@ class TestAdoptable(unittest.TestCase):
                 }
                 '''
 
-        expected = {'data': {'adoptable': [{'repository': 'testRepo1'}, {'repository': 'testRepo'}]}}
+        expected = {'data': {'adoptable': [
+            {'repository': 'testRepo1'}, {'repository': 'testRepo'}]}}
 
         client = Client(schema)
         executed = client.execute(sent)
