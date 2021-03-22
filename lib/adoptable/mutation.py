@@ -1,7 +1,7 @@
 import graphene
 
 from .type import AdoptableType
-from.model import Adoptable
+from .model import Adoptable
 
 
 class CreateAdoptable(graphene.Mutation):
