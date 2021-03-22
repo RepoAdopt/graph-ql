@@ -12,8 +12,8 @@ class Query:
     )
 
     def resolve_adoptable(self, info, page, limit):
-        if limit > 100:
-            limit = 100
+        limit = max(1, min(limit, 100))
+        page = max(0, page)
 
         adoptables_to_skip = page * limit
         return list(Adoptable.objects.order_by('-id').skip(adoptables_to_skip).limit(limit))
