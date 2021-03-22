@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from mongoengine import connect
 from flask_graphql import GraphQLView
-from lib.schema.AdoptableSchema import schema
+from lib.schema import schema
 from populate_db import populate
 from dotenv import load_dotenv
 from os import getenv
