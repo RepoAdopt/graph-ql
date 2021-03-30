@@ -16,7 +16,11 @@ class Query:
         page = max(0, page)
 
         adoptables_to_skip = page * limit
-        if token != None:
-            return list(Adoptable.objects(owner__ne=token['username']).order_by('-id').skip(adoptables_to_skip).limit(limit))
 
-        return list(Adoptable.objects.order_by('-id').skip(adoptables_to_skip).limit(limit))
+        adoptables = None
+        if token != None:
+            adoptables = Adoptable.objects(owner__ne=token['username'])
+        else :
+            adoptables = Adoptable.objects.order_by('-id')
+
+        return list(adoptables.skip(adoptables_to_skip).limit(limit))
