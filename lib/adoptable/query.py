@@ -21,6 +21,14 @@ class Query:
         if token != None:
             adoptables = Adoptable.objects(owner__ne=token['username'])
         else :
-            adoptables = Adoptable.objects.order_by('-id')
+            adoptables = Adoptable.objects
 
-        return list(adoptables.skip(adoptables_to_skip).limit(limit))
+        return list(adoptables.order_by('-id').skip(adoptables_to_skip).limit(limit))
+
+    my_adoptables = graphene.List(
+        AdoptableType
+    )
+
+    def resolve_my_adoptables(self, info, token):
+        return list(Adoptable.objects(owner=token['username']))
+
