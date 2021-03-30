@@ -3,6 +3,7 @@ from flask_cors import CORS
 from mongoengine import connect
 from flask_graphql import GraphQLView
 from lib.schema import schema
+from lib.authorization import Authorization
 from populate_db import populate
 from dotenv import load_dotenv
 from os import getenv
@@ -18,6 +19,7 @@ app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
     schema=schema,
     graphiql=True,
     pretty=True,
+    middleware={Authorization()}
 ))
 
 

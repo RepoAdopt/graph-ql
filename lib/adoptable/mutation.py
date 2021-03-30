@@ -9,11 +9,11 @@ class CreateAdoptable(graphene.Mutation):
     adoptable = graphene.Field(AdoptableType)
 
     class Arguments:
-        repository = graphene.String()
-        description = graphene.String()
+        repository = graphene.String(required=True)
+        description = graphene.String(required=False)
 
-    def mutate(root, info, repository, description):
-        adoptable = Adoptable(repository=repository, description=description)
+    def mutate(root, info, token, **args):
+        adoptable = Adoptable(**args, owner=token['username'])
         adoptable.save()
 
         return CreateAdoptable(adoptable=adoptable)

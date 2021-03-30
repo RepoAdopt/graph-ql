@@ -7,4 +7,5 @@ from mongoengine.fields import (
 class Adoptable(Document):
     meta = {'collection': 'adoptables'}
     repository = StringField(required=True)
-    description = StringField()
+    description = StringField(required=False)
+    owner = StringField(required=True)
