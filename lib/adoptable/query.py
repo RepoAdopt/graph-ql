@@ -17,8 +17,6 @@ class Query:
 
         adoptables_to_skip = page * limit
         if token != None:
-            return list(Adoptable.objects.filter({'owner': {
-                '$ne': token['username']
-            }}).order_by('-id').skip(adoptables_to_skip).limit(limit))
+            return list(Adoptable.objects(owner__ne=token['username']).order_by('-id').skip(adoptables_to_skip).limit(limit))
 
         return list(Adoptable.objects.order_by('-id').skip(adoptables_to_skip).limit(limit))
