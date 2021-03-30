@@ -8,3 +8,4 @@ class Adoptable(Document):
     meta = {'collection': 'adoptables'}
     repository = StringField(required=True)
     description = StringField()
+    owner = StringField(required=True)
