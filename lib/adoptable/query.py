@@ -11,9 +11,14 @@ class Query:
         limit=graphene.Int()
     )
 
-    def resolve_adoptable(self, info, page, limit):
+    def resolve_adoptable(self, info, page, limit, token=None):
         limit = max(1, min(limit, 100))
         page = max(0, page)
 
         adoptables_to_skip = page * limit
+        if token != None:
+            return list(Adoptable.objects.filter({'owner': {
+                '$ne': token['username']
+            }}).order_by('-id').skip(adoptables_to_skip).limit(limit))
+
         return list(Adoptable.objects.order_by('-id').skip(adoptables_to_skip).limit(limit))
