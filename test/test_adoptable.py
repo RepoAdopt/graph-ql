@@ -14,9 +14,9 @@ class TestAdoptable(unittest.TestCase):
     def setUpClass(cls):
         connect('RepoAdoptTest', host='mongomock://localhost/')
 
-        adoptable = Adoptable(repository="testRepo")
+        adoptable = Adoptable(repository="testRepo", owner="Test")
         adoptable.save()
-        adoptable1 = Adoptable(repository="testRepo1")
+        adoptable1 = Adoptable(repository="testRepo1", owner="Test")
         adoptable1.save()
 
     @classmethod

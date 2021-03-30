@@ -1,4 +1,4 @@
-import ast
+import json
 import graphene
 
 from jwcrypto.jws import JWS
@@ -20,8 +20,8 @@ class CreateAdoptable(graphene.Mutation):
         token.deserialize(info.context.headers['Authorization'].removeprefix('Bearer '))
         
         byte_payload = token.objects.pop('payload')
-        dict_str = byte_payload.decode('UTF-8')
-        payload = ast.literal_eval(dict_str)
+        json_payload = byte_payload.decode('UTF-8')
+        payload = json.loads(json_payload)
 
         adoptable = Adoptable(**args, owner=payload['username'])
         adoptable.save()
