@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
- python: circleci/python@0.2.1
+  python: circleci/python@0.2.1
   sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
           name: run tests
           command: python -m unittest
       - sonarcloud/scan
-      
+
   docker-build:
     docker:
       - image: docker:17.05.0-ce-git
@@ -29,8 +29,8 @@ jobs:
       - run:
           name: docker login
           command: |
-           docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
-           docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
+            docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
+            docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
 
 workflows:
   main:
