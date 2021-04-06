@@ -4,7 +4,7 @@ from mongoengine import connect
 from flask_graphql import GraphQLView
 from lib.schema import schema
 from lib.authorization import Authorization
-from populate_db import populate
+from lib.populate_db import populate
 from dotenv import load_dotenv
 from os import getenv
 
