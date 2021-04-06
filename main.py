@@ -14,18 +14,23 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
-    'graphql',
-    schema=schema,
-    graphiql=True,
-    pretty=True,
-    middleware={Authorization()}
-))
+app.add_url_rule(
+    "/graphql",
+    view_func=GraphQLView.as_view(
+        "graphql",
+        schema=schema,
+        graphiql=True,
+        pretty=True,
+        middleware={Authorization()},
+    ),
+)
 
 
-if __name__ == '__main__':
-    db = connect('RepoAdopt', host=getenv("HOST"), port=getenv("DBPORT"), alias='default')
+if __name__ == "__main__":
+    db = connect(
+        "RepoAdopt", host=getenv("HOST"), port=getenv("DBPORT"), alias="default"
+    )
     if getenv("ENVIRONMENT") == "develop":
-        db.drop_database('RepoAdopt')
+        db.drop_database("RepoAdopt")
         populate()
-    app.run(debug=True, host='0.0.0.0', port=getenv("PORT"))
+    app.run(debug=True, host="0.0.0.0", port=getenv("PORT"))
