@@ -13,7 +13,7 @@ class CreateAdoptable(graphene.Mutation):
         description = graphene.String(required=False)
 
     def mutate(root, info, token, **args):
-        adoptable = Adoptable(**args, owner=token['username'])
+        adoptable = Adoptable(**args, owner=token["username"])
         adoptable.save()
 
         return CreateAdoptable(adoptable=adoptable)
