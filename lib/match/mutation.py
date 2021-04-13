@@ -9,7 +9,7 @@ class CreateMatch(graphene.Mutation):
     match = graphene.Field(MatchType)
 
     class Arguments:
-        repository = graphene.String(required=True)
+        repository_id = graphene.String(required=True)
 
     def mutate(root, info, **args):
         token = info.context.token
@@ -23,7 +23,7 @@ class DeleteMatch(graphene.Mutation):
     match = graphene.Field(MatchType)
 
     class Arguments:
-        repository = graphene.String(required=True)
+        repository_id = graphene.String(required=True)
 
     def mutate(root, info, **args):
         token = info.context.token

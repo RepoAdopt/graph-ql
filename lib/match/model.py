@@ -5,8 +5,8 @@ from mongoengine.fields import StringField, ObjectIdField
 class Match(Document):
     meta = {
         "collection": "matches",
-        "indexes": [{"fields": ("repository", "user"), "unique": True}],
+        "indexes": [{"fields": ("repository_id", "user"), "unique": True}],
     }
 
-    repository = ObjectIdField(required=True)
+    repository_id = ObjectIdField(required=True)
     user = StringField(required=True)
