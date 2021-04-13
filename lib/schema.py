@@ -2,11 +2,12 @@ import graphene
 
 
 from .adoptable.mutation import Mutation as AdoptableMutation
+from .match.mutation import Mutation as MatchMutation
 
 from .adoptable.query import Query as AdoptableQuery
 
 
-class Mutation(graphene.ObjectType, AdoptableMutation):
+class Mutation(graphene.ObjectType, AdoptableMutation, MatchMutation):
     def __init__(self) -> None:
         super().__init__()
 
