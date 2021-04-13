@@ -10,12 +10,11 @@ class CreateMatch(graphene.Mutation):
 
     class Arguments:
         repository = graphene.String(required=True)
-        user = graphene.String(required=True)
 
     def mutate(root, info, token, **args):
-        print(token["username"])
+        # TODO CHANGE SO NO DOUBLE USER-REPO COMBO'S CAN BE IN DATABASE
         match = Match(**args, user=token["username"])
-        match.save()
+        match.save(match, upsert=True)
 
         return CreateMatch(match=match)
 

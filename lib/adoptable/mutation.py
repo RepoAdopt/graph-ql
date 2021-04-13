@@ -14,6 +14,7 @@ class CreateAdoptable(graphene.Mutation):
 
     def mutate(root, info, token, **args):
         adoptable = Adoptable(**args, owner=token["username"])
+        # TODO CHANGE SO NO DOUBLE OWNER-REPO COMBO'S CAN BE IN DATABASE
         adoptable.save()
 
         return CreateAdoptable(adoptable=adoptable)
