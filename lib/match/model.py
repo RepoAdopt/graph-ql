@@ -7,5 +7,6 @@ class Match(Document):
         "collection": "matches",
         "indexes": [{"fields": ("repository", "user"), "unique": True}],
     }
+
     repository = ObjectIdField(required=True)
     user = StringField(required=True)

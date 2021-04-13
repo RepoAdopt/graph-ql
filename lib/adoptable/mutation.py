@@ -12,9 +12,9 @@ class CreateAdoptable(graphene.Mutation):
         repository = graphene.String(required=True)
         description = graphene.String(required=False)
 
-    def mutate(root, info, token, **args):
+    def mutate(root, info, **args):
+        token = info.context.token
         adoptable = Adoptable(**args, owner=token["username"])
-        # TODO CHANGE SO NO DOUBLE OWNER-REPO COMBO'S CAN BE IN DATABASE
         adoptable.save()
 
         return CreateAdoptable(adoptable=adoptable)

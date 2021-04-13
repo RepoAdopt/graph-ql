@@ -7,7 +7,8 @@ from .type import AdoptableType
 class Query:
     adoptable = graphene.List(AdoptableType, page=graphene.Int(), limit=graphene.Int())
 
-    def resolve_adoptable(self, info, page, limit, token=None):
+    def resolve_adoptable(self, info, page, limit):
+        token = info.context.token
         limit = max(1, min(limit, 100))
         page = max(0, page)
 
@@ -23,5 +24,6 @@ class Query:
 
     my_adoptables = graphene.List(AdoptableType)
 
-    def resolve_my_adoptables(self, info, token):
+    def resolve_my_adoptables(self, info):
+        token = info.context.token
         return list(Adoptable.objects(owner=token["username"]))
