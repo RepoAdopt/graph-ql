@@ -12,7 +12,7 @@ class CreateMatch(graphene.Mutation):
         repository_id = graphene.String(required=True)
 
     def mutate(root, info, **args):
-        token = info.context.token
+        token = getattr(info.context, "token", None)
         match = Match(**args, user=token["username"])
         match.save()
 
@@ -27,7 +27,7 @@ class DeleteMatch(graphene.Mutation):
         repository_id = graphene.String(required=True)
 
     def mutate(root, info, **args):
-        token = info.context.token
+        token = getattr(info.context, "token", None)
         match = Match.objects.get(**args, user=token["username"])
         match.delete()
 
