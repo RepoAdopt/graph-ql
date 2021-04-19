@@ -15,8 +15,9 @@ jobs:
       - run:
           name: run tests
           command: |
-            coverage run -m unittest discover
-            coverage report -m
+            coverage erase
+            coverage run --branch -m unittest discover
+            coverage xml -i
       - sonarcloud/scan
 
   docker-build:
