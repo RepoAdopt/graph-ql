@@ -32,6 +32,7 @@ class DeleteMatch(graphene.Mutation):
     def mutate(root, info, **args):
         token = getattr(info.context, "token", None)
         if token is not None:
+            ObjectId(args.get("adoptable"))
             match = Match.objects.get(**args, user=token["username"])
             match.delete()
             return DeleteMatch(match=match)
