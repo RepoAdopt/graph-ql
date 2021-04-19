@@ -44,9 +44,13 @@ if __name__ == "__main__":
 
     if res.status_code == 201:
         post(
-            url=f'{base_url}/{name}/routes', data={"name": name, "paths[]": "/graphql"}
+            url=f"{base_url}/{name}/routes", data={"name": name, "paths[]": "/graphql"}
         )
 
         print("Created gateway connection!")
+    elif res.status_code == 409:
+        print("Gateway connection already created!")
+    else:
+        print("Could not create gateway connection!")
 
     app.run(debug=True, host="0.0.0.0", port=getenv("PORT"))
