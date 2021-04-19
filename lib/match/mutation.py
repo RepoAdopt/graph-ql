@@ -20,6 +20,7 @@ class CreateMatch(graphene.Mutation):
 
 
 class DeleteMatch(graphene.Mutation):
+
     match = graphene.Field(MatchType)
 
     class Arguments:
@@ -27,7 +28,7 @@ class DeleteMatch(graphene.Mutation):
 
     def mutate(root, info, **args):
         token = info.context.token
-        match = Match.objects(**args, user=token["username"])
+        match = Match.objects.get(**args, user=token["username"])
         match.delete()
 
         return DeleteMatch(match=match)
