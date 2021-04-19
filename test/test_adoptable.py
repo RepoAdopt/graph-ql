@@ -40,7 +40,6 @@ class TestAdoptable(unittest.TestCase):
 
         client = Client(schema)
         executed = client.execute(sent)
-        print(executed)
         assert executed == expected
 
     def test_get_pagination_adoptables_second_page(self):
@@ -121,7 +120,6 @@ class TestAdoptable(unittest.TestCase):
     #     }
     #
     #     executed = client.execute(sent, context=context)
-    #     print(executed)
     #     assert executed == expected
     #
     #     Adoptable.objects(repository="test").delete()
