@@ -8,14 +8,14 @@ class Query:
     adoptable = graphene.List(AdoptableType, page=graphene.Int(), limit=graphene.Int())
 
     def resolve_adoptable(self, info, page, limit):
-        token = info.context.token
+        token = getattr(info.context, "token", None)
         limit = max(1, min(limit, 100))
         page = max(0, page)
 
         adoptables_to_skip = page * limit
 
         adoptables = None
-        if token != None:
+        if token is not None:
             adoptables = Adoptable.objects(owner__ne=token["username"])
         else:
             adoptables = Adoptable.objects
