@@ -9,14 +9,15 @@ class CreateMatch(graphene.Mutation):
     match = graphene.Field(MatchType)
 
     class Arguments:
-        repository_id = graphene.String(required=True)
+        adoptable = graphene.String(required=True)
 
     def mutate(root, info, **args):
         token = getattr(info.context, "token", None)
-        match = Match(**args, user=token["username"])
-        match.save()
-
-        return CreateMatch(match=match)
+        if token is not None:
+            match = Match(**args, user=token["username"])
+            match.save()
+            return CreateMatch(match=match)
+        return {}
 
 
 class DeleteMatch(graphene.Mutation):
@@ -24,14 +25,15 @@ class DeleteMatch(graphene.Mutation):
     match = graphene.Field(MatchType)
 
     class Arguments:
-        repository_id = graphene.String(required=True)
+        adoptable = graphene.String(required=True)
 
     def mutate(root, info, **args):
         token = getattr(info.context, "token", None)
-        match = Match.objects.get(**args, user=token["username"])
-        match.delete()
-
-        return DeleteMatch(match=match)
+        if token is not None:
+            match = Match.objects.get(**args, user=token["username"])
+            match.delete()
+            return DeleteMatch(match=match)
+        return {}
 
 
 class Mutation:

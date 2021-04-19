@@ -25,5 +25,7 @@ class Query:
     my_adoptables = graphene.List(AdoptableType)
 
     def resolve_my_adoptables(self, info):
-        token = info.context.token
-        return list(Adoptable.objects(owner=token["username"]))
+        token = getattr(info.context, "token", None)
+        if token is not None:
+            return list(Adoptable.objects(owner=token["username"]))
+        return list()

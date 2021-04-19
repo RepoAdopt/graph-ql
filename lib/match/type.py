@@ -1,6 +1,4 @@
 from graphene_mongo import MongoengineObjectType
-
-
 from .model import Match
 
 
