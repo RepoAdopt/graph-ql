@@ -14,10 +14,7 @@ jobs:
       - python/save-cache
       - run:
           name: run tests
-          command: |
-            coverage erase
-            coverage run --branch -m unittest discover
-            coverage xml
+          command: python -m unittest
       - sonarcloud/scan
 
   docker-build:
