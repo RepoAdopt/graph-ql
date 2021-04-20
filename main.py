@@ -50,6 +50,8 @@ def establish_gateway_connection(attempts=0):
             return
         elif res.status_code == 409:
             print("Gateway connection already created!")
+            
+            return
         else:
             print("Could not create gateway connection!")
 
