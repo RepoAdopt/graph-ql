@@ -54,7 +54,7 @@ def establish_gateway_connection():
     except:
         print("Gateway is not available!")
 
-    sleep(time_ns=200)
+    sleep(0.2)
     establish_gateway_connection()
 
 
