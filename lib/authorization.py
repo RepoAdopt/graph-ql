@@ -13,6 +13,6 @@ class Authorization:
             byte_payload = token.objects.pop("payload")
             json_payload = byte_payload.decode("UTF-8")
             payload = json.loads(json_payload)
-            return next(root, info, **args, token=payload)
+            info.context.token = payload
 
         return next(root, info, **args)

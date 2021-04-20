@@ -12,7 +12,8 @@ class CreateAdoptable(graphene.Mutation):
         repository = graphene.String(required=True)
         description = graphene.String(required=False)
 
-    def mutate(root, info, token, **args):
+    def mutate(root, info, **args):
+        token = getattr(info.context, "token", None)
         adoptable = Adoptable(**args, owner=token["username"])
         adoptable.save()
 
