@@ -27,8 +27,10 @@ app.add_url_rule(
     ),
 )
 
+MAX_RETRIES = 20
 
-def establish_gateway_connection():
+
+def establish_gateway_connection(attempts=0):
     base_url = f'http://{getenv("GATEWAY")}/services'
     name = "graphql"
     try:
@@ -55,7 +57,9 @@ def establish_gateway_connection():
         print("Gateway is not available!")
 
     sleep(0.2)
-    establish_gateway_connection()
+
+    if attempts <= MAX_RETRIES:
+        establish_gateway_connection(attempts=attempts + 1)
 
 
 if __name__ == "__main__":
