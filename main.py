@@ -1,3 +1,4 @@
+from requests import post
 from flask import Flask
 from flask_cors import CORS
 from mongoengine import connect
@@ -33,4 +34,23 @@ if __name__ == "__main__":
     if getenv("ENVIRONMENT") == "develop":
         db.drop_database("RepoAdopt")
         populate()
+
+    base_url = f'http://{getenv("GATEWAY")}/services'
+    name = "graphql"
+    res = post(
+        url=base_url,
+        data={"name": name, "url": getenv("GRAPHQL_URL")},
+    )
+
+    if res.status_code == 201:
+        post(
+            url=f"{base_url}/{name}/routes", data={"name": name, "paths[]": "/graphql"}
+        )
+
+        print("Created gateway connection!")
+    elif res.status_code == 409:
+        print("Gateway connection already created!")
+    else:
+        print("Could not create gateway connection!")
+
     app.run(debug=True, host="0.0.0.0", port=getenv("PORT"))
