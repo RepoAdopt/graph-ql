@@ -1,10 +1,11 @@
 from .model import Match
+from lib.adoptable.model import Adoptable
 
 
 def populate():
-    match = Match(repository_id="60756a6b2ef13b728ec4cc29", user="Niek125")
+    match = Match(user="Niek125", adoptable=Adoptable.objects[0].id)
     match.save()
-    match1 = Match(repository_id="60756a6b2ef13b728ec4cc2a", user="BeauTaapken")
+    match1 = Match(user="BeauTaapken", adoptable=Adoptable.objects[1].id)
     match1.save()
-    match2 = Match(repository_id="60756a6b2ef13b728ec4cc2b", user="Niek125")
+    match2 = Match(user="Niek125", adoptable=Adoptable.objects[2].id)
     match2.save()

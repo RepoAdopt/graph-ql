@@ -14,10 +14,11 @@ class CreateAdoptable(graphene.Mutation):
 
     def mutate(root, info, **args):
         token = getattr(info.context, "token", None)
-        adoptable = Adoptable(**args, owner=token["username"])
-        adoptable.save()
-
-        return CreateAdoptable(adoptable=adoptable)
+        if token is not None:
+            adoptable = Adoptable(**args, owner=token["username"])
+            adoptable.save()
+            return CreateAdoptable(adoptable=adoptable)
+        return {}
 
 
 class Mutation:

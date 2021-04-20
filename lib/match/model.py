@@ -1,12 +1,17 @@
 from mongoengine import Document
-from mongoengine.fields import StringField, ObjectIdField
+from mongoengine.fields import (
+    StringField,
+    ReferenceField,
+)
+
+from lib.adoptable.model import Adoptable
 
 
 class Match(Document):
     meta = {
         "collection": "matches",
-        "indexes": [{"fields": ("repository_id", "user"), "unique": True}],
+        "indexes": [{"fields": ("adoptable", "user"), "unique": True}],
     }
 
-    repository_id = ObjectIdField(required=True)
     user = StringField(required=True)
+    adoptable = ReferenceField(Adoptable)
