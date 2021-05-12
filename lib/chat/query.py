@@ -18,11 +18,19 @@ class Query:
         if token is None:
             return {}
 
-        chat = Chat.objects.get(adoptable_id=ObjectId(adoptable_id))
+        chat = Chat.objects(adoptable_id=ObjectId(adoptable_id)).all()
+
+        if len(chat) != 1:
+            return {}
+
+        chat = chat[0]
+        print(chat)
 
         matches = Match.objects(adoptable=chat["adoptable_id"])
         chat.users = map(lambda match: match.user, matches)
         # TODO check if user is authorized (matched)
-        chat.chat_messages = ChatMessage.objects(chat_id=chat["id"]).order_by("timestamp")
+        chat.chat_messages = ChatMessage.objects(chat_id=chat["id"]).order_by(
+            "timestamp"
+        )
 
         return chat
