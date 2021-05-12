@@ -1,10 +1,10 @@
-from graphene import List, 
+# from graphene import List, 
 from graphene_mongo import MongoengineObjectType
 
 from .model import Chat
 
 
-class ChatMessageType(MongoengineObjectType):
+class ChatType(MongoengineObjectType):
 	class Meta:
 			model = Chat
 
