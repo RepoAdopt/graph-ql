@@ -14,8 +14,8 @@ class Query:
     def resolve_chat(self, info, adoptable_id):
         token = getattr(info.context, "token", None)
 
-        # if token is None:
-        #     return {}
+        if token is None:
+            return {}
 
         chat = Chat.objects.get(adoptable_id=ObjectId(adoptable_id))
         # TODO check if user is authorized (matched)
