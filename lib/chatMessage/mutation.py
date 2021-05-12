@@ -16,7 +16,7 @@ class PostChatMessage(graphene.Mutation):
         token = getattr(info.context, "token", None)
 
         if token is None:
-            return []
+            return {}
 
         chat_message = ChatMessage(
             **args, user=token["username"], timestamp=datetime.now()

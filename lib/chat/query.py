@@ -9,15 +9,15 @@ from lib.chatMessage.model import ChatMessage
 
 
 class Query:
-    chat = graphene.Field(ChatType, id=graphene.String())
+    chat = graphene.Field(ChatType, adoptable_id=graphene.String())
 
-    def resolve_chat(self, info, id):
+    def resolve_chat(self, info, adoptable_id):
         token = getattr(info.context, "token", None)
 
-        if token is None:
-            return []
+        # if token is None:
+        #     return {}
 
-        chat = Chat.objects.get(id=ObjectId(id))
+        chat = Chat.objects.get(adoptable_id=ObjectId(adoptable_id))
         # TODO check if user is authorized (matched)
         chat.chat_messages = ChatMessage.objects(chat_id=chat["id"]).order_by("timestamp")
 
