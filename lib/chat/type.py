@@ -1,4 +1,4 @@
-from graphene import List
+from graphene import List, String
 from graphene_mongo import MongoengineObjectType
 
 from .model import Chat
@@ -11,9 +11,4 @@ class ChatType(MongoengineObjectType):
         model = Chat
 
     chat_messages = List(ChatMessageType)
-
-    # users = List()
-
-    # def resolve_users(**kwargs):
-    # 	print(kwargs)
-    # 	return []
+    users = List(String)
