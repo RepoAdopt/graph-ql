@@ -7,6 +7,7 @@ from .type import ChatType
 
 from lib.chatMessage.model import ChatMessage
 from lib.match.model import Match
+from lib.adoptable.model import Adoptable
 
 
 class Query:
@@ -28,7 +29,14 @@ class Query:
 
         matches = Match.objects(adoptable=chat["adoptable_id"])
         chat.users = map(lambda match: match.user, matches)
-        # TODO check if user is authorized (matched)
+
+        adoptable = Adoptable.objects.get(id=chat["adoptable_id"])
+        chat.users.append(adoptable["owner"])
+        chat.users = set(chat.users)
+
+        if token["username"] not in chat.users:
+            return {}
+
         chat.chat_messages = ChatMessage.objects(chat_id=chat["id"]).order_by(
             "timestamp"
         )
