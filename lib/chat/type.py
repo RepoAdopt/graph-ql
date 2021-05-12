@@ -1,15 +1,19 @@
-# from graphene import List, 
+from graphene import List
 from graphene_mongo import MongoengineObjectType
 
 from .model import Chat
 
+from lib.chatMessage.type import ChatMessageType
+
 
 class ChatType(MongoengineObjectType):
-	class Meta:
-			model = Chat
+    class Meta:
+        model = Chat
 
-	# users = List()
+    chat_messages = List(ChatMessageType)
 
-	# def resolve_users(**kwargs):
-	# 	print(kwargs)
-	# 	return []
+    # users = List()
+
+    # def resolve_users(**kwargs):
+    # 	print(kwargs)
+    # 	return []
