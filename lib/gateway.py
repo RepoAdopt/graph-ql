@@ -28,7 +28,7 @@ def establish_gateway_connection(attempts=0):
             if create_service_res.status_code == 201:
                 print("Kong: Service created")
             else:
-                print("Kong: Failed to create service")
+                raise Exception("Kong: Failed to create service")
 
             # Create the upstream
             create_upstream_res = post(
@@ -37,14 +37,14 @@ def establish_gateway_connection(attempts=0):
             if create_upstream_res.status_code == 201:
                 print("Kong: Upstream created")
             else:
-                print("Kong: Failed to create upstream")
+                raise Exception("Kong: Failed to create upstream")
 
             # Link upstream
             link_upstream_res = patch(url=service_url, data={"host": upstream_name})
             if link_upstream_res.status_code == 200:
                 print("Kong: Upstream linked")
             else:
-                print("Kong: Failed to link upstream to service")
+                raise Exception("Kong: Failed to link upstream to service")
 
             # Create the route
             create_route_res = post(
@@ -54,7 +54,7 @@ def establish_gateway_connection(attempts=0):
             if create_route_res.status_code == 201:
                 print("Kong: Route added")
             else:
-                print("Kong: Failed to create route")
+                raise Exception("Kong: Failed to create route")
 
         # Add target
         res = post(
@@ -62,13 +62,13 @@ def establish_gateway_connection(attempts=0):
         )
 
         if res.status_code == 200 or res.status_code == 409:
-            print("Kong: Connection established")
+            print("Kong: Created target. Connection established")
             return
         else:
             print("Kong: Failed to create target")
 
-    except:
-        print("Gateway is not available!")
+    except Exception as error:
+        print(error)
 
     sleep(0.2)
     establish_gateway_connection(attempts=attempts + 1)
