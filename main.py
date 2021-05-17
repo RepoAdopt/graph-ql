@@ -1,5 +1,5 @@
 from time import sleep, time_ns
-from requests import post
+from requests import post, get, patch
 from flask import Flask
 from flask_cors import CORS
 from mongoengine import connect
@@ -31,32 +31,49 @@ MAX_RETRIES = int(getenv("GATEWAY_RETRIES"))
 
 
 def establish_gateway_connection(attempts=0):
-    if attempts <= MAX_RETRIES:
+    if attempts >= MAX_RETRIES:
         return
 
-    base_url = f'http://{getenv("GATEWAY")}/services'
     name = "graphql"
+    upstream_name = f"{name}_upstream"
+    base_url = f'http://{getenv("GATEWAY")}'
+    service_url = f"{base_url}/services/{name}"
+    upstream_url = f"{base_url}/upstreams/{upstream_name}"
+
     try:
+        service_res = get(url=service_url)
+
+        if service_res.status_code == 404:
+            # Create the Kong service
+            post(
+                url=f"{base_url}/services",
+                data={"name": name, "url": base_url},
+            )
+            print("Kong: Service created")
+            # Create the upstream
+            post(url=f"{base_url}/upstreams", data={"name": upstream_name})
+            print("Kong: Upstream created")
+            # Link upstream
+            patch(url=service_url, data={"host": upstream_name})
+            print("Kong: Upstream linked")
+            # Create the route
+            req = post(
+                url=f"{service_url}/routes",
+                data={"name": name, "paths[]": "/graphql", "strip_path": "false"},
+            )
+            print(req.url)
+            print(req.status_code)
+            print(req.json())
+            print("Kong: Route added")
+
+        # Add target
         res = post(
-            url=base_url,
-            data={"name": name, "url": getenv("GRAPHQL_URL")},
+            url=f"{upstream_url}/targets", data={"target": getenv("GRAPHQL_URL")}
         )
 
-        if res.status_code == 201:
-            post(
-                url=f"{base_url}/{name}/routes",
-                data={"name": name, "paths[]": "/graphql"},
-            )
-
-            print("Created gateway connection!")
-
+        if res.status_code == 200 or res.status_code == 409:
+            print("Kong: Connection established")
             return
-        elif res.status_code == 409:
-            print("Gateway connection already created!")
-
-            return
-        else:
-            print("Could not create gateway connection!")
 
     except:
         print("Gateway is not available!")
