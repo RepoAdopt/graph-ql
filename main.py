@@ -57,13 +57,10 @@ def establish_gateway_connection(attempts=0):
             patch(url=service_url, data={"host": upstream_name})
             print("Kong: Upstream linked")
             # Create the route
-            req = post(
+            post(
                 url=f"{service_url}/routes",
                 data={"name": name, "paths[]": "/graphql", "strip_path": "false"},
             )
-            print(req.url)
-            print(req.status_code)
-            print(req.json())
             print("Kong: Route added")
 
         # Add target
