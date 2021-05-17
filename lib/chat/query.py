@@ -25,7 +25,6 @@ class Query:
             return {}
 
         chat = chat[0]
-        print(chat)
 
         matches = Match.objects(adoptable=chat["adoptable_id"])
         chat.users = map(lambda match: match.user, matches)
