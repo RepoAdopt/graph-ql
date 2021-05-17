@@ -1,17 +1,16 @@
-from time import sleep, time_ns
-from requests import post
 from flask import Flask
 from flask_cors import CORS
 from mongoengine import connect
 from flask_graphql import GraphQLView
-from lib.schema import schema
-from lib.authorization import Authorization
-from lib.populate_db import populate
 from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv()
 
+from lib.schema import schema
+from lib.authorization import Authorization
+from lib.populate_db import populate
+from lib.gateway import establish_gateway_connection
 
 app = Flask(__name__)
 CORS(app)
@@ -26,44 +25,6 @@ app.add_url_rule(
         middleware={Authorization()},
     ),
 )
-
-MAX_RETRIES = int(getenv("GATEWAY_RETRIES"))
-
-
-def establish_gateway_connection(attempts=0):
-    if attempts <= MAX_RETRIES:
-        return
-
-    base_url = f'http://{getenv("GATEWAY")}/services'
-    name = "graphql"
-    try:
-        res = post(
-            url=base_url,
-            data={"name": name, "url": getenv("GRAPHQL_URL")},
-        )
-
-        if res.status_code == 201:
-            post(
-                url=f"{base_url}/{name}/routes",
-                data={"name": name, "paths[]": "/graphql"},
-            )
-
-            print("Created gateway connection!")
-
-            return
-        elif res.status_code == 409:
-            print("Gateway connection already created!")
-
-            return
-        else:
-            print("Could not create gateway connection!")
-
-    except:
-        print("Gateway is not available!")
-
-    sleep(0.2)
-    establish_gateway_connection(attempts=attempts + 1)
-
 
 if __name__ == "__main__":
     db = connect(
