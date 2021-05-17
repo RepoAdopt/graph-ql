@@ -20,23 +20,41 @@ def establish_gateway_connection(attempts=0):
 
         if service_res.status_code == 404:
             # Create the Kong service
-            post(
+            create_service_res = post(
                 url=f"{base_url}/services",
                 data={"name": name, "url": base_url},
             )
-            print("Kong: Service created")
+
+            if create_service_res.status_code == 201:
+                print("Kong: Service created")
+            else:
+                print("Kong: Failed to create service")
+
             # Create the upstream
-            post(url=f"{base_url}/upstreams", data={"name": upstream_name})
-            print("Kong: Upstream created")
+            create_upstream_res = post(
+                url=f"{base_url}/upstreams", data={"name": upstream_name}
+            )
+            if create_upstream_res.status_code == 201:
+                print("Kong: Upstream created")
+            else:
+                print("Kong: Failed to create upstream")
+
             # Link upstream
-            patch(url=service_url, data={"host": upstream_name})
-            print("Kong: Upstream linked")
+            link_upstream_res = patch(url=service_url, data={"host": upstream_name})
+            if link_upstream_res.status_code == 200:
+                print("Kong: Upstream linked")
+            else:
+                print("Kong: Failed to link upstream to service")
+
             # Create the route
-            post(
+            create_route_res = post(
                 url=f"{service_url}/routes",
                 data={"name": name, "paths[]": "/graphql", "strip_path": "false"},
             )
-            print("Kong: Route added")
+            if create_route_res.status_code == 201:
+                print("Kong: Route added")
+            else:
+                print("Kong: Failed to create route")
 
         # Add target
         res = post(
@@ -46,6 +64,8 @@ def establish_gateway_connection(attempts=0):
         if res.status_code == 200 or res.status_code == 409:
             print("Kong: Connection established")
             return
+        else:
+            print("Kong: Failed to create target")
 
     except:
         print("Gateway is not available!")
