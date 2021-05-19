@@ -19,33 +19,21 @@ class Query:
         if token is None:
             return {}
 
-        chat = Chat.objects().all()
-        print(chat)
+        chat = Chat.objects(adoptable_id=ObjectId(adoptable_id)).all()
 
         if len(chat) != 1:
             return {}
 
         chat = chat[0]
 
-        # matches = Match.objects(adoptable=chat["adoptable_id"])
-        # print(matches[0].user)
+        users = list(Match.objects(adoptable=chat["adoptable_id"]).values_list("user"))
 
-        # def map_user(match):
-        #     print("map")
-        #     print(match.user)
-        #     return match.user
+        adoptable = Adoptable.objects(id=chat["adoptable_id"]).all()[0]
+        users.append(adoptable["owner"])
+        chat.users = set(users)
 
-        # chat.users = map(map_user, matches)
-        # print(chat.users)
-
-        adoptable = Adoptable.objects(id=chat["adoptable_id"]).all()
-        chat.users = ["Niek125", "BeauTaapken"]
-        # chat.users.append()
-        # chat.users.append(adoptable["owner"])
-        chat.users = set(chat.users)
-
-        # if token["username"] not in chat.users:
-        #     return {}
+        if token["username"] not in chat.users:
+            return {}
 
         chat.chat_messages = ChatMessage.objects(chat_id=chat["id"]).order_by(
             "timestamp"
