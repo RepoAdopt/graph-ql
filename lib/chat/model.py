@@ -1,10 +1,10 @@
 from mongoengine import Document
-from mongoengine.fields import ObjectIdField
+from mongoengine.fields import ReferenceField
 
-from lib.chatMessage.model import ChatMessage
+from lib.adoptable.model import Adoptable
 
 
 class Chat(Document):
     meta = {"collection": "chats"}
 
-    adoptable_id = ObjectIdField(required=True)
+    adoptable = ReferenceField(Adoptable)

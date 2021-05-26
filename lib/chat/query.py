@@ -19,16 +19,21 @@ class Query:
         if token is None:
             return {}
 
-        chat = Chat.objects(adoptable_id=ObjectId(adoptable_id)).all()
+        adoptable = Adoptable.objects(id=ObjectId(adoptable_id)).all()
+
+        if len(adoptable) != 1:
+            return {}
+        
+        adoptable = adoptable[0]
+        chat = Chat.objects(adoptable=adoptable).all()
+        chat.adoptable = adoptable
 
         if len(chat) != 1:
             return {}
 
         chat = chat[0]
 
-        users = list(Match.objects(adoptable=chat["adoptable_id"]).values_list("user"))
-
-        adoptable = Adoptable.objects(id=chat["adoptable_id"]).all()[0]
+        users = list(Match.objects(adoptable=adoptable.id).values_list("user"))
         users.append(adoptable["owner"])
         chat.users = set(users)
 

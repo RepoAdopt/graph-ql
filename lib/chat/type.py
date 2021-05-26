@@ -4,6 +4,7 @@ from graphene_mongo import MongoengineObjectType
 from .model import Chat
 
 from lib.chatMessage.type import ChatMessageType
+from lib.adoptable.type import AdoptableType
 
 
 class ChatType(MongoengineObjectType):
