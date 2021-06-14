@@ -3,6 +3,7 @@ import graphene
 from .type import AdoptableType
 from .model import Adoptable
 
+from lib.chat.model import Chat
 
 class CreateAdoptable(graphene.Mutation):
 
@@ -17,6 +18,8 @@ class CreateAdoptable(graphene.Mutation):
         if token is not None:
             adoptable = Adoptable(**args, owner=token["username"])
             adoptable.save()
+            chat = Chat(adoptable=adoptable)
+            chat.save()
             return CreateAdoptable(adoptable=adoptable)
         return {}
 

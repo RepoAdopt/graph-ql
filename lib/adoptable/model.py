@@ -10,3 +10,4 @@ class Adoptable(Document):
     repository = StringField(required=True)
     description = StringField(required=False)
     owner = StringField(required=True)
+    new_owner = StringField(required=False)
