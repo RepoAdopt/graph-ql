@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
- python: circleci/python@0.2.1
+  python: circleci/python@0.2.1
+  sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
   build-and-test:
@@ -12,10 +13,33 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
+          name: install coverage
+          command: sudo pip install coverage
+      - run:
           name: run tests
-          command: python -m unittest lib/tests/unittests/TestAdoptableSchema.py
+          command: |
+            coverage erase
+            coverage run -m unittest discover
+            coverage xml
+      - sonarcloud/scan
+
+  docker-build:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: docker build
+          command: docker build -t docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/} .
+      - run:
+          name: docker login
+          command: |
+            docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
+            docker push docker.io/$NAMESPACE/graphql:${CIRCLE_BRANCH#*/}
 
 workflows:
   main:
     jobs:
       - build-and-test
+      - docker-build
